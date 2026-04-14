@@ -1,5 +1,7 @@
 # Real bank exports — never commit personal financial data
 data/raw/
+data/inbox/
+data/processed/
 
 # DuckDB database files
 db/
