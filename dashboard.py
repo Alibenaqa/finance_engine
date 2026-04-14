@@ -55,6 +55,23 @@ _CATEGORY_COLORS = {
 }
 
 
+# ── DB change detection ───────────────────────────────────────────────────────
+
+def _db_row_count() -> int:
+    """Read current row count directly from DuckDB (no cache)."""
+    import duckdb
+    db = Path("db/finance.duckdb")
+    if not db.exists():
+        return 0
+    try:
+        con = duckdb.connect(str(db), read_only=True)
+        n = con.execute("SELECT COUNT(*) FROM transactions").fetchone()[0]
+        con.close()
+        return n
+    except Exception:
+        return 0
+
+
 # ── Cached resources ──────────────────────────────────────────────────────────
 
 @st.cache_resource
@@ -508,7 +525,28 @@ def _tab_forecast(etl, horizon):
 
 # ── Main ──────────────────────────────────────────────────────────────────────
 
+@st.fragment(run_every=30)
+def _auto_refresh():
+    """Polls the DB every 30 s; clears ML caches and reruns if row count changed."""
+    current = _db_row_count()
+    last    = st.session_state.get("_db_row_count", current)
+    st.session_state.setdefault("_db_row_count", current)
+
+    if current != last:
+        _run_classifier.clear()
+        _run_anomaly.clear()
+        _run_forecast.clear()
+        st.session_state["_db_row_count"] = current
+        st.toast(
+            f"Nouvelles données détectées — {current - last:+d} transactions",
+            icon="🔄",
+        )
+        st.rerun()
+
+
 def main():
+    _auto_refresh()
+
     etl           = _get_etl()
     start, end, horizon = _sidebar(etl)
 
