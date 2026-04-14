@@ -14,5 +14,8 @@ prophet>=1.1           # time-series forecasting (Facebook/Meta Prophet)
 streamlit>=1.35
 plotly>=5.22
 
+# ── Automation ────────────────────────────────────────────────────────────────
+watchdog>=4.0          # file-system watcher for watcher.py
+
 # ── Dev / test ────────────────────────────────────────────────────────────────
 pytest>=8.0
