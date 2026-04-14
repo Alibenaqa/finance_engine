@@ -1,0 +1,18 @@
+# ── Core ──────────────────────────────────────────────────────────────────────
+pandas>=2.2
+pyarrow>=16.0          # parquet I/O
+
+# ── Layer 2 — ETL ─────────────────────────────────────────────────────────────
+duckdb>=1.0
+
+# ── Layer 3 — ML ──────────────────────────────────────────────────────────────
+xgboost>=2.0
+scikit-learn>=1.4      # LabelEncoder, IsolationForest, train/test split
+prophet>=1.1           # time-series forecasting (Facebook/Meta Prophet)
+
+# ── Layer 4 — Dashboard ───────────────────────────────────────────────────────
+streamlit>=1.35
+plotly>=5.22
+
+# ── Dev / test ────────────────────────────────────────────────────────────────
+pytest>=8.0
