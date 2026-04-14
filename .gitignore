@@ -1,3 +1,12 @@
+# Real bank exports — never commit personal financial data
+data/raw/
+
+# DuckDB database files
+db/
+
+# Saved ML models
+models/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
